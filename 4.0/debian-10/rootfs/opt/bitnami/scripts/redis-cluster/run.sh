@@ -35,10 +35,8 @@ ARGS+=("$@")
 if is_boolean_yes "$REDIS_CLUSTER_CREATOR" && ! [[ -f "${REDIS_DATA_DIR}/nodes.conf" ]]; then
     # Start Redis in background
     if am_i_root; then
-        info "yes gosu"
         gosu "$REDIS_DAEMON_USER" redis-server "${ARGS[@]}" &
     else
-        info "yes redis-server"
         redis-server "${ARGS[@]}" &
     fi
     # Create the cluster
@@ -47,11 +45,8 @@ if is_boolean_yes "$REDIS_CLUSTER_CREATOR" && ! [[ -f "${REDIS_DATA_DIR}/nodes.c
     fg
 else
     if am_i_root; then
-        info "no gosu"
         exec gosu "$REDIS_DAEMON_USER" redis-server "${ARGS[@]}"
     else
-        info "no redis-server"
-        info "${ARGS[@]}"
         exec redis-server "${ARGS[@]}"
     fi
 fi
